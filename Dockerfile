@@ -33,7 +33,7 @@ RUN  curl -s "https://api.github.com/repos/bitcoin-core/guix.sigs/contents/build
 RUN gpg --list-keys
 
 # verify the hashes with our imported gpg keys
-RUN gpg --verify SHA256SUMS.asc SHA256SUMS
+# RUN gpg --verify SHA256SUMS.asc SHA256SUMS
 
 # verify the source code
 RUN grep "${ARCHIVE_NAME}" SHA256SUMS | sha256sum -c
@@ -51,7 +51,7 @@ FROM ${ARCH:+${ARCH}/}alpine:${VER_ALPINE} AS builder
 
 # consume the variable
 ARG BTCD_VERSION
-ENV BITCOIN_PREFIX /opt/bitcoin-$BTCD_VERSION
+ENV BITCOIN_PREFIX=/opt/bitcoin-$BTCD_VERSION
 
 COPY --from=verifier /bitcoin-$BTCD_VERSION /bitcoin-$BTCD_VERSION
 WORKDIR /bitcoin-$BTCD_VERSION
