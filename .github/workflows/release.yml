@@ -1,6 +1,11 @@
 name: Build and Push Docker Image
 
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      bitcoind_version:
+        description: 'Version of bitcoind to build'
+        required: true
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
