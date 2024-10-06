@@ -27,8 +27,9 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build --build-arg BTCD_VERSION=${{ github.event.inputs.bitcoind_version }} -t primexz/bitcoind-docker:${{ github.event.inputs.bitcoind_version }} .
-          docker tag primexz/bitcoind-docker:${{ github.event.inputs.bitcoind_version }} primexz/bitcoind:latest
+          docker build --platform=linux/amd64,linux/arm64 --build-arg BTCD_VERSION=${{ github.event.inputs.bitcoind_version }} -t primexz/bitcoind-docker:${{ github.event.inputs.bitcoind_version }} .
+          docker tag primexz/bitcoind-docker:${{ github.event.inputs.bitcoind_version }}
+          docker tag primexz/bitcoind-docker:latest
 
       - name: Push Docker Image
         run: |
