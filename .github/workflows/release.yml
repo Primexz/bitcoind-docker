@@ -19,19 +19,35 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
       - name: Docker Login
         uses: docker/login-action@v3
         with:
           username: primexz
           password: ${{ secrets.DOCKER_TOKEN }}
 
-      - name: Build Docker Image
-        run: |
-          docker build --platform=linux/amd64,linux/arm64 --build-arg BTCD_VERSION=${{ github.event.inputs.bitcoind_version }} -t primexz/bitcoind-docker:${{ github.event.inputs.bitcoind_version }} .
-          docker tag primexz/bitcoind-docker:${{ github.event.inputs.bitcoind_version }}
-          docker tag primexz/bitcoind-docker:latest
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          tags:
+            - primexz/bitcoind-docker:${{ github.event.inputs.bitcoind_version }}
+            - primexz/bitcoind-docker:latest
+          build-args: |
+            BTCD_VERSION=${{ github.event.inputs.bitcoind_version }}
+          platforms:
+            - linux/amd64
+            - linux/arm64
 
-      - name: Push Docker Image
-        run: |
-          docker push primexz/bitcoind-docker:${{ github.event.inputs.bitcoind_version }}
-          docker push primexz/bitcoind-docker:latest
+      # - name: Build Docker Image
+      #   run: |
+      #     docker build --platform=linux/amd64,linux/arm64 --build-arg BTCD_VERSION=${{ github.event.inputs.bitcoind_version }} -t primexz/bitcoind-docker:${{ github.event.inputs.bitcoind_version }} .
+      #     docker tag primexz/bitcoind-docker:${{ github.event.inputs.bitcoind_version }}
+      #     docker tag primexz/bitcoind-docker:latest
+
+      # - name: Push Docker Image
+      #   run: |
+      #     docker push primexz/bitcoind-docker:${{ github.event.inputs.bitcoind_version }}
+      #     docker push primexz/bitcoind-docker:latest
