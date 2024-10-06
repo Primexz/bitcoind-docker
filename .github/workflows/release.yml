@@ -32,9 +32,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags:
-            - primexz/bitcoind-docker:${{ github.event.inputs.bitcoind_version }}
-            - primexz/bitcoind-docker:latest
+          tags: primexz/bitcoind-docker:${{ github.event.inputs.bitcoind_version }},primexz/bitcoind-docker:latest
           build-args: |
             BTCD_VERSION=${{ github.event.inputs.bitcoind_version }}
           platforms:
